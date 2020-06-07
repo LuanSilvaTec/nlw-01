@@ -24,13 +24,13 @@ interface Point {
     longitude: number
 }
 
-interface Params{
-    uf:string,
-    city:string
+interface Params {
+    uf: string,
+    city: string
 }
 const Points = () => {
 
-    const route=useRoute()
+    const route = useRoute()
     const navigation = useNavigation();
     const [items, setItems] = useState<Item[]>([]);
     const [points, setPoints] = useState<Point[]>([]);
@@ -75,8 +75,8 @@ const Points = () => {
     function handleNavigateBack() {
         navigation.goBack();
     }
-    function handleNavigateToDetail(id:number) {
-        navigation.navigate('Detail',{point_id:id});
+    function handleNavigateToDetail(id: number) {
+        navigation.navigate('Detail', { point_id: id });
     }
 
     function handleSelectItem(id: number) {
@@ -119,7 +119,7 @@ const Points = () => {
                                 <Marker
                                     key={String(point.id)}
                                     style={styles.mapMarker}
-                                    onPress={()=>handleNavigateToDetail(point.id)}
+                                    onPress={() => handleNavigateToDetail(point.id)}
                                     coordinate={{
                                         latitude: point.latitude,
                                         longitude: point.longitude,

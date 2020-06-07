@@ -7,11 +7,11 @@ import { useNavigation, useRoute } from '@react-navigation/native'
 import * as MailComposer from 'expo-mail-composer';
 
 interface Params{
-    point_id: number
+    point_id: number;
 }
 
 interface Data {
-    point:{
+    serializedPoints:{
         image:string,
         image_url:string,
         name:string,
@@ -29,10 +29,9 @@ const Detail = () => {
     const navigation = useNavigation();
     const route= useRoute();
     const routeParams = route.params as Params;
+    console.log(routeParams)
     const [data, setData]= useState<Data>({} as Data)
-
-
-
+    console.log(data)
 
     useEffect(()=>{
         api.get(`points/${routeParams.point_id}`).then(response=>{
@@ -41,20 +40,20 @@ const Detail = () => {
     },[])
     
     function handleWhatsapp(){
-        Linking.openURL(`whatsapp://send?phone=${data.point.whatsapp}&text=Tenho interesse sobre coleta de residuos`)
+        Linking.openURL(`whatsapp://send?phone=${data.serializedPoints.whatsapp}&text=Tenho interesse sobre coleta de residuos`)
     }
 
     function handleComposeMail(){
         MailComposer.composeAsync({
             subject:'Interesse na coleta de resíduos',
-            recipients: [data.point.email]
+            recipients: [data.serializedPoints.email]
         })
     }
     function handleNavigateBack() {
 
         navigation.goBack();
     }
-    if(!data.point){
+    if(!data.serializedPoints){
         return null;
     }
     return (
@@ -63,13 +62,16 @@ const Detail = () => {
                 <TouchableOpacity onPress={handleNavigateBack}>
                     <Icon name="arrow-left" size={20} color="#34cb79" />
                 </TouchableOpacity>
-                <Image style={styles.pointImage} source={{ uri: data.point.image_url }} />
-                <Text style={styles.pointName}>{data.point.name}</Text>
-                <Text style={styles.pointItems}>{data.items.map(item=> item.title).join(', ')}</Text>
+                <Image style={styles.pointImage} source={{ uri: data.serializedPoints.image_url }} />
+                
+                <Text style={styles.pointName}>{data.serializedPoints.name}</Text>
+                <Text style={styles.pointItems}>
+                    {data.items.map(item=> item.title).join(', ')}
+                </Text>
 
                 <View style={styles.address}>
                     <Text style={styles.addressTitle}>Endereço</Text>
-                    <Text style={styles.addressContent}>{data.point.city},{data.point.uf}</Text>
+                    <Text style={styles.addressContent}>{data.serializedPoints.city},{data.serializedPoints.uf}</Text>
                 </View>
             </View>
             <View style={styles.footer}>
